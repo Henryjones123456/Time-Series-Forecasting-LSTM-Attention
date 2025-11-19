@@ -1,19 +1,85 @@
 # Time-Series-Forecasting-LSTM-Attention
-Time-Series Forecasting Using LSTM/GRU with Attention Mechanism
+Multivariate Time-Series Forecasting with LSTM/GRU + Attention
 
-This project focuses on predicting future values of a time-series using deep learning. The main goal is to build an advanced forecasting model using LSTM or GRU combined with an Attention mechanism, and compare it with traditional and baseline models.
+This project builds an advanced deep learning model to forecast future values of a multivariate time-series dataset using LSTM/GRU networks combined with an Attention mechanism.
+It also compares performance with traditional models (ARIMA) and baseline LSTM models to evaluate improvements.
 
-A synthetic multivariate dataset (with more than 1000 records and 5+ features) is created to represent a realistic scenario with trend, seasonality, and noise. The dataset includes temperature, humidity, pressure, wind speed, and energy demand values. After preprocessing and scaling the data, a supervised structure is created for training the neural networks.
+🔍 Project Overview
 
-The core model uses LSTM/GRU layers to capture long-term patterns and the Attention layer to focus on the most important time steps. Hyperparameters like number of layers, hidden size, batch size, learning rate, and sequence length are tuned to improve performance.
+The goal is to create a complete forecasting pipeline that:
 
-Finally, the model is compared with:
+Generates or loads a synthetic multivariate time-series dataset (5+ features, 1000+ rows).
 
-Traditional ARIMA
+Preprocesses and transforms the data for supervised learning.
 
-Basic LSTM without attention
+Builds deep learning models:
 
-Our Attention-based LSTM/GRU
+LSTM + Attention
 
-The comparison is done using MAE, MSE, and RMSE.
-The project concludes with selecting the best model and listing its optimal hyperparameters.
+GRU + Attention
+
+Baseline LSTM
+
+Trains and tunes model hyperparameters.
+
+Compares all models using MAE, MSE, RMSE.
+
+Produces clear plots of predictions vs actual values.
+
+📌 Key Features
+
+Fully automated dataset generation (trend + noise + seasonality).
+
+Configurable architecture (layers, units, dropout, attention).
+
+Clean modular code for training, predicting, and evaluating.
+
+Side-by-side model comparison.
+
+Easy to customize for any dataset.
+
+🧠 Technologies Used
+
+Python
+
+TensorFlow / Keras
+
+NumPy
+
+Pandas
+
+Matplotlib
+
+Scikit-learn
+
+Statsmodels (for ARIMA)
+
+📊 Model Comparison
+
+Each model is evaluated using:
+
+MAE (Mean Absolute Error)
+
+MSE (Mean Squared Error)
+
+RMSE (Root Mean Squared Error)
+
+Plots show:
+
+Actual vs Predicted values
+How to Run
+pip install -r requirements.txt
+python main.py
+
+📜 Output
+
+You will get:
+
+Forecast plot
+
+Model performance report
+
+Best model summary
+
+Saved model weights
+Training & validation loss curves
