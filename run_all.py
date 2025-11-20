@@ -1,4 +1,3 @@
-# run_all.py
 import pandas as pd
 from data import generate_multivariate_series
 from evaluate import evaluate_all
@@ -15,3 +14,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
