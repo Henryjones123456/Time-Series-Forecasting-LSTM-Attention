@@ -1,4 +1,3 @@
-# dataset.py
 import numpy as np
 import torch
 from torch.utils.data import Dataset
@@ -6,11 +5,7 @@ from sklearn.preprocessing import StandardScaler
 
 class TimeSeriesDataset(Dataset):
     def __init__(self, data_df, seq_len=60, scaler=None, train=True):
-        """
-        data_df: pandas DataFrame with features and 'target' column
-        seq_len: number of past timesteps to use
-        scaler: sklearn scaler fitted on training data (if provided)
-        """
+
         self.seq_len = seq_len
         values = data_df.values.astype(float)
         self.features = values[:, :-1]
@@ -19,7 +14,6 @@ class TimeSeriesDataset(Dataset):
         if scaler is None:
             self.feature_scaler = StandardScaler()
             self.target_scaler = StandardScaler()
-            # fit on all available samples (callers should ensure train split)
             self.feature_scaler.fit(self.features)
             self.target_scaler.fit(self.targets)
         else:
@@ -47,3 +41,4 @@ class TimeSeriesDataset(Dataset):
 
     def get_scalers(self):
         return (self.feature_scaler, self.target_scaler)
+
