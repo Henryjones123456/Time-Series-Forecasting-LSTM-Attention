@@ -1,4 +1,3 @@
-# evaluate.py
 import pandas as pd
 import numpy as np
 import torch
@@ -23,14 +22,11 @@ def split_data(df, test_size=0.2, val_size=0.1):
 def evaluate_all(df, seq_len=60, results_dir="results"):
     os.makedirs(results_dir, exist_ok=True)
 
-    # ----- Split dataset -----
     train_df = df.iloc[:-200]
     val_df   = df.iloc[-200:]
 
-    # ----- Input dimension from dataframe -----
     input_dim = train_df.shape[1]
 
-    # ----- Parameter sets -----
     lstm_params = {
         "hidden_dim": 64,
         "num_layers": 2
@@ -41,7 +37,6 @@ def evaluate_all(df, seq_len=60, results_dir="results"):
         "num_layers": 2
     }
 
-    # ----- Train Standard LSTM -----
     lstm_res = train_and_validate(
         train_df, val_df,
         seq_len=seq_len,
@@ -53,7 +48,6 @@ def evaluate_all(df, seq_len=60, results_dir="results"):
         save_path=os.path.join(results_dir, "lstm_best.pt")
     )
 
-    # ----- Train Attention LSTM -----
     attn_res = train_and_validate(
         train_df, val_df,
         seq_len=seq_len,
@@ -65,7 +59,6 @@ def evaluate_all(df, seq_len=60, results_dir="results"):
         save_path=os.path.join(results_dir, "attn_best.pt")
     )
 
-    # ----- Summary -----
     summary = {
         "input_dim": input_dim,
         "sequence_length": seq_len,
@@ -74,4 +67,5 @@ def evaluate_all(df, seq_len=60, results_dir="results"):
             "Attention_LSTM": attn_res
         }
     }
+
 
