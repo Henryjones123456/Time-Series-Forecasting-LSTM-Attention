@@ -3,7 +3,6 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 
-# adjust these imports to match your project filenames if needed
 from model import LSTMAttentionModel, SimpleLSTMModel
 
 
@@ -27,12 +26,9 @@ def train_and_validate(train_df, val_df, seq_len=60, epochs=20,
                        params=None, device=None, save_path="best_model.pt"):
 
     params = params.copy() if params else {}
-    # -----------------------------
-    # Extract LR safely
-    # -----------------------------
-    lr = params.pop("lr", 0.001)  # default LR = 0.001
 
-    # Ensure dropout isn't passed to LSTM when num_layers == 1 (PyTorch warning)
+    lr = params.pop("lr", 0.001) 
+
     num_layers = params.get("num_layers", 1)
     if num_layers == 1 and params.get("dropout", 0) and params.get("dropout") > 0:
         print("Note: num_layers==1, setting dropout=0 to avoid PyTorch RNN warning.")
@@ -40,9 +36,6 @@ def train_and_validate(train_df, val_df, seq_len=60, epochs=20,
 
     input_dim = train_df.shape[1]
 
-    # -----------------------------
-    # Model selection
-    # -----------------------------
     if model_type == "attn":
         model = LSTMAttentionModel(input_dim, **params)
     else:
@@ -51,9 +44,6 @@ def train_and_validate(train_df, val_df, seq_len=60, epochs=20,
     device = device or ("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
 
-    # -----------------------------
-    # Optimizer using LR
-    # -----------------------------
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     loss_fn = nn.MSELoss()
 
@@ -71,13 +61,11 @@ def train_and_validate(train_df, val_df, seq_len=60, epochs=20,
             optimizer.zero_grad()
             out = model(Xb)
 
-            # --------- FIX: handle models that return (preds, attn_weights) or preds ----------
             if isinstance(out, tuple) or isinstance(out, list):
                 preds = out[0]
             else:
                 preds = out
 
-            # ensure preds shape is (batch, 1) to match yb
             if preds.dim() == 1:
                 preds = preds.unsqueeze(1)
             if yb.dim() == 1:
@@ -91,7 +79,6 @@ def train_and_validate(train_df, val_df, seq_len=60, epochs=20,
 
         train_loss_epoch = train_loss_epoch / len(train_loader.dataset)
 
-        # Validation
         model.eval()
         val_loss = 0.0
         with torch.no_grad():
@@ -112,7 +99,6 @@ def train_and_validate(train_df, val_df, seq_len=60, epochs=20,
 
         val_loss = val_loss / len(val_loader.dataset)
 
-        # Save best
         if val_loss < best_loss:
             best_loss = val_loss
             torch.save(model.state_dict(), save_path)
@@ -120,3 +106,4 @@ def train_and_validate(train_df, val_df, seq_len=60, epochs=20,
         print(f"Epoch {ep+1}/{epochs}  Train Loss: {train_loss_epoch:.6f}  Val Loss: {val_loss:.6f}")
 
     return {"best_val_loss": best_loss, "save_path": save_path}
+
