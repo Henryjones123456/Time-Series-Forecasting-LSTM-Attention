@@ -1,4 +1,3 @@
-# utils.py
 import numpy as np
 import torch
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -26,3 +25,4 @@ def to_numpy(tensor):
     if torch.is_tensor(tensor):
         return tensor.detach().cpu().numpy()
     return np.array(tensor)
+
