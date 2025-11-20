@@ -1,4 +1,3 @@
-# model.py
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -6,18 +5,11 @@ import torch.nn.functional as F
 class AttentionLayer(nn.Module):
     def __init__(self, hidden_dim, attn_dim):
         super().__init__()
-        # simple additive attention
         self.W1 = nn.Linear(hidden_dim, attn_dim, bias=False)
         self.W2 = nn.Linear(hidden_dim, attn_dim, bias=False)
         self.v = nn.Linear(attn_dim, 1, bias=False)
 
     def forward(self, encoder_outputs, last_hidden):
-        """
-        encoder_outputs: (batch, seq_len, hidden_dim)
-        last_hidden: (batch, hidden_dim) -- e.g. last LSTM hidden state
-        returns: context vector (batch, hidden_dim) and attention weights
-        """
-        # expand last_hidden over time axis
         seq_len = encoder_outputs.size(1)
         last_expanded = last_hidden.unsqueeze(1).expand(-1, seq_len, -1)
         score = torch.tanh(self.W1(encoder_outputs) + self.W2(last_expanded))
@@ -38,12 +30,9 @@ class LSTMAttentionModel(nn.Module):
         )
 
     def forward(self, x):
-        # x: (batch, seq_len, input_dim)
         outputs, (h_n, c_n) = self.lstm(x)  # outputs: (batch, seq_len, hidden_dim)
-        # use last layer's hidden state (h_n[-1])
         last_hidden = h_n[-1]  # (batch, hidden_dim)
         context, attn_weights = self.attn(outputs, last_hidden)
-        # combine context and last_hidden
         combined = torch.cat([context, last_hidden], dim=1)
         out = self.regressor(combined)
         return out.squeeze(-1), attn_weights
@@ -82,4 +71,5 @@ class SimpleLSTMModel(nn.Module):
         out, _ = self.lstm(x)
         out = out[:, -1, :]   # last timestep
         out = self.fc(out)
+
         return out.squeeze(-1)
