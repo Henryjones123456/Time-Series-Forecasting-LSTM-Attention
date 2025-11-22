@@ -1,4 +1,4 @@
-# Time-Series-Forecasting-LSTM-Attention
+# Advanced Time Series Forecasting with Neural Network and Attention Mechanisms
 Multivariate Time-Series Forecasting with LSTM/GRU + Attention
 
 This project builds an advanced deep learning model to forecast future values of a multivariate time-series dataset using LSTM/GRU networks combined with an Attention mechanism.
